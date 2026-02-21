@@ -1,3 +1,3 @@
-// Database package — Drizzle ORM schema and migrations
-// Will be populated in PR-DATA-001 and PR-DATA-002
-export {}
+export * from './schema/index.js'
+export { createDb } from './connection.js'
+export type { Database } from './connection.js'
