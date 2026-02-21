@@ -1,0 +1,18 @@
+# Default owner for everything
+* @utkarshsharma19
+
+# Platform / infra
+/infra/ @utkarshsharma19
+/.github/ @utkarshsharma19
+turbo.json @utkarshsharma19
+
+# Backend
+/apps/api/ @utkarshsharma19
+/apps/worker/ @utkarshsharma19
+
+# Frontend
+/apps/web/ @utkarshsharma19
+
+# Packages
+/packages/db/ @utkarshsharma19
+/packages/shared/ @utkarshsharma19
