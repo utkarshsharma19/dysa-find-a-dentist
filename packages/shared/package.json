@@ -23,5 +23,8 @@
     "@dysa/eslint-config": "workspace:*",
     "eslint": "^9.20.0",
     "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
   }
 }
