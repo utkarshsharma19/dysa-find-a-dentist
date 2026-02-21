@@ -1,2 +1,6 @@
 export * from './enums.js'
 export * from './extensions.js'
+export * from './clinics.js'
+export * from './triage.js'
+export * from './sessions.js'
+export * from './match-jobs.js'
