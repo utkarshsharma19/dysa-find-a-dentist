@@ -3,6 +3,7 @@ import { CreateSessionSchema } from '@dysa/shared'
 import { sessions } from '@dysa/db'
 import { getDb } from '../db.js'
 import { evaluateTriage } from '../services/triage.js'
+import { enqueueMatchJob } from '../services/match-jobs.js'
 
 function roundCoordinate(value: number, decimals = 2): number {
   const factor = Math.pow(10, decimals)
@@ -52,9 +53,17 @@ export async function sessionsRoute(app: FastifyInstance) {
       })
       .returning({ id: sessions.id, createdAt: sessions.createdAt })
 
+    // If not blocked by triage, enqueue a match job
+    let matchJobId: string | null = null
+    if (!triage.blocked) {
+      const result = await enqueueMatchJob(session.id)
+      matchJobId = result.matchJobId
+    }
+
     return reply.status(201).send({
       sessionId: session.id,
       createdAt: session.createdAt,
+      matchJobId,
       triage: {
         action: triage.action,
         blocked: triage.blocked,

@@ -4,6 +4,7 @@ import helmet from '@fastify/helmet'
 import sensible from '@fastify/sensible'
 import { healthRoute } from './routes/health.js'
 import { sessionsRoute } from './routes/sessions.js'
+import { matchJobsRoute } from './routes/match-jobs.js'
 import requestContext from './plugins/request-context.js'
 import { LOG_FIELDS_BLOCKLIST } from '@dysa/shared'
 
@@ -29,6 +30,7 @@ export function buildApp() {
   // Routes
   app.register(healthRoute)
   app.register(sessionsRoute)
+  app.register(matchJobsRoute)
 
   return app
 }

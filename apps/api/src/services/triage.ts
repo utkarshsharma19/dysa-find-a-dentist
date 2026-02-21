@@ -100,10 +100,10 @@ export function evaluateTriage(input: CreateSessionInput): TriageResult {
 
     const feverMatch = !rule.requiresFever || input.hasFever === true
     const swellingMatch = !rule.requiresFacialSwelling || input.hasFacialSwelling === true
-    const breathingMatch =
-      !rule.requiresDifficultyBreathing || input.difficultySwallowingBreathing === true
+    // Breathing already handled above; skip rules that require it
+    if (rule.requiresDifficultyBreathing) continue
 
-    if (feverMatch && swellingMatch && breathingMatch) {
+    if (feverMatch && swellingMatch) {
       return {
         action: rule.action,
         blocked: rule.action === 'ROUTE_TO_ED',
