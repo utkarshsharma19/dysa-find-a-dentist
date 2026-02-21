@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "@dysa/db": "workspace:*",
-    "@dysa/shared": "workspace:*"
+    "@dysa/shared": "workspace:*",
+    "bullmq": "^5.70.0",
+    "drizzle-orm": "0.39.3",
+    "postgres": "^3.4.8"
   },
   "devDependencies": {
     "@dysa/eslint-config": "workspace:*",

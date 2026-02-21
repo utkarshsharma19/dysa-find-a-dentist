@@ -3,3 +3,4 @@ export const APP_VERSION = '0.1.0' as const
 
 export * from './logging/index.js'
 export * from './validation/index.js'
+export * from './queue/config.js'
