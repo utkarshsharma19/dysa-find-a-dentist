@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { CreateSessionSchema } from '@dysa/shared'
 import { sessions } from '@dysa/db'
 import { getDb } from '../db.js'
+import { evaluateTriage } from '../services/triage.js'
 
 function roundCoordinate(value: number, decimals = 2): number {
   const factor = Math.pow(10, decimals)
@@ -20,6 +21,9 @@ export async function sessionsRoute(app: FastifyInstance) {
     }
 
     const input = parsed.data
+
+    // Evaluate triage BEFORE storing session
+    const triage = evaluateTriage(input)
 
     // Round lat/lng for privacy (~1.1km / 0.7mi precision)
     const latRound = input.lat != null ? roundCoordinate(input.lat) : null
@@ -42,6 +46,7 @@ export async function sessionsRoute(app: FastifyInstance) {
         hasFever: input.hasFever ?? null,
         hasFacialSwelling: input.hasFacialSwelling ?? null,
         difficultySwallowingBreathing: input.difficultySwallowingBreathing ?? null,
+        triageActionTaken: triage.action,
         referralSource: input.referralSource ?? null,
         userAgent: request.headers['user-agent'] ?? null,
       })
@@ -50,6 +55,12 @@ export async function sessionsRoute(app: FastifyInstance) {
     return reply.status(201).send({
       sessionId: session.id,
       createdAt: session.createdAt,
+      triage: {
+        action: triage.action,
+        blocked: triage.blocked,
+        messageTitle: triage.messageTitle,
+        messageBody: triage.messageBody,
+      },
     })
   })
 }
