@@ -19,6 +19,7 @@ import { BudgetStep } from './steps/BudgetStep'
 import { LocationStep } from './steps/LocationStep'
 import { TravelStep } from './steps/TravelStep'
 import { LanguageStep } from './steps/LanguageStep'
+import { ReviewStep } from './steps/ReviewStep'
 
 const STEP_COMPONENTS: Record<string, React.ComponentType> = {
   complaint: ComplaintStep,
@@ -62,15 +63,9 @@ export default function IntakePage() {
         ))}
       </Stepper>
 
-      {isComplete ? (
-        <Box sx={{ textAlign: 'center', py: 4 }}>
-          <p>Ready to submit! (PR-FE-004 will wire this up)</p>
-        </Box>
-      ) : (
-        StepComponent && <StepComponent />
-      )}
+      {isComplete ? <ReviewStep /> : StepComponent && <StepComponent />}
 
-      {state.step > 0 && !isComplete && (
+      {state.step > 0 && (
         <Box sx={{ mt: 2 }}>
           <Button onClick={prevStep} color="inherit">
             Back
