@@ -9,7 +9,7 @@ import { scoreFreshness } from '../matching/scoring/freshness.js'
 import { assignBuckets, computeDisplayConfidence } from '../matching/bucketing.js'
 import type { CandidateClinic, MatchInput } from '../matching/types.js'
 
-const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+const recentDate = new Date(Date.now() - 20 * 24 * 60 * 60 * 1000)
 
 function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
   return {
@@ -19,7 +19,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
     active: true,
     lat: 39.29,
     lng: -76.61,
-    lastVerifiedAt: thirtyDaysAgo,
+    lastVerifiedAt: recentDate,
     services: [
       {
         serviceType: 'EXAM',
@@ -27,7 +27,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         availableForUninsured: true,
         availableForPrivate: true,
         newPatientsAccepted: true,
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
       {
         serviceType: 'EMERGENCY_VISIT',
@@ -35,7 +35,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         availableForUninsured: true,
         availableForPrivate: true,
         newPatientsAccepted: true,
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
       {
         serviceType: 'CLEANING',
@@ -43,7 +43,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         availableForUninsured: true,
         availableForPrivate: true,
         newPatientsAccepted: true,
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
       {
         serviceType: 'XRAY',
@@ -51,7 +51,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         availableForUninsured: true,
         availableForPrivate: true,
         newPatientsAccepted: true,
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
       {
         serviceType: 'FILLING',
@@ -59,7 +59,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         availableForUninsured: true,
         availableForPrivate: true,
         newPatientsAccepted: true,
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
     ],
     serviceRules: [],
@@ -69,7 +69,7 @@ function makeClinic(overrides: Partial<CandidateClinic> = {}): CandidateClinic {
         priceMin: '0',
         priceMax: '40',
         pricingModel: 'SLIDING_SCALE',
-        lastVerifiedAt: thirtyDaysAgo,
+        lastVerifiedAt: recentDate,
       },
     ],
     accessTimingEntries: [
