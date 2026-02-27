@@ -1,5 +1,5 @@
 import { pgTable, uuid, text, smallint, timestamp, jsonb, index } from 'drizzle-orm/pg-core'
-import { sessions } from './sessions.js'
+import { sessions } from './sessions'
 
 export const matchJobs = pgTable(
   'match_jobs',

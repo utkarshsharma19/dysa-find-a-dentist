@@ -20,6 +20,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/seed/index.ts",
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@dysa/eslint-config": "workspace:*",
     "drizzle-kit": "^0.30.0",
+    "tsx": "^4.19.0",
     "eslint": "^9.20.0",
     "typescript": "^5.7.0"
   }
