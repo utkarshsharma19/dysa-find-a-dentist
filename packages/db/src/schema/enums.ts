@@ -203,3 +203,5 @@ export const notificationType = pgEnum('notification_type', [
 export const notificationChannel = pgEnum('notification_channel', ['SMS', 'EMAIL'])
 
 export const deliveryStatus = pgEnum('delivery_status', ['SENT', 'FAILED', 'DELIVERED', 'UNKNOWN'])
+
+export const adminRole = pgEnum('admin_role', ['ADMIN', 'EDITOR', 'VIEWER'])

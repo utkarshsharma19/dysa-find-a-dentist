@@ -33,5 +33,13 @@
     "*.{json,md,css}": [
       "pnpm exec prettier --write"
     ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "bcrypt",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }

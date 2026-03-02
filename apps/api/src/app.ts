@@ -7,6 +7,8 @@ import { sessionsRoute } from './routes/sessions.js'
 import { matchJobsRoute } from './routes/match-jobs.js'
 import { recommendationsRoute } from './routes/recommendations.js'
 import requestContext from './plugins/request-context.js'
+import adminAuth from './plugins/admin-auth.js'
+import { adminAuthRoute } from './routes/admin/auth.js'
 import { LOG_FIELDS_BLOCKLIST } from '@dysa/shared'
 
 export function buildApp() {
@@ -27,12 +29,16 @@ export function buildApp() {
   app.register(helmet)
   app.register(sensible)
   app.register(requestContext)
+  app.register(adminAuth)
 
   // Routes
   app.register(healthRoute)
   app.register(sessionsRoute)
   app.register(matchJobsRoute)
   app.register(recommendationsRoute)
+
+  // Admin routes
+  app.register(adminAuthRoute)
 
   return app
 }

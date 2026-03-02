@@ -8,6 +8,7 @@ import {
   clinicServiceRules,
   pricing,
   accessTiming,
+  adminUsers,
 } from '../schema/index.js'
 import { clinicsData } from './data/clinics.js'
 import { clinicHoursData } from './data/clinic-hours.js'
@@ -16,6 +17,7 @@ import { accessRulesData } from './data/access-rules.js'
 import { clinicServiceRulesData } from './data/clinic-service-rules.js'
 import { pricingData } from './data/pricing.js'
 import { accessTimingData } from './data/access-timing.js'
+import { adminUsersData } from './data/admin-users.js'
 
 const DATABASE_URL = process.env.DATABASE_URL
 if (!DATABASE_URL) {
@@ -39,6 +41,10 @@ async function seed() {
   const seedIds = clinicsData.map((c) => c.id)
   await db.delete(clinics).where(sql`id = ANY(${seedIds})`)
 
+  // Clear admin users by fixed UUIDs
+  const adminIds = adminUsersData.map((u) => u.id)
+  await db.delete(adminUsers).where(sql`id = ANY(${adminIds})`)
+
   // Insert in FK order
   console.info('  Inserting clinics...')
   await db.insert(clinics).values(clinicsData)
@@ -60,6 +66,9 @@ async function seed() {
 
   console.info('  Inserting access timing...')
   await db.insert(accessTiming).values(accessTimingData)
+
+  console.info('  Inserting admin users...')
+  await db.insert(adminUsers).values(adminUsersData)
 
   console.info('Seed complete!')
   process.exit(0)
