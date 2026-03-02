@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { inArray } from 'drizzle-orm'
 import { createDb } from '../connection.js'
 import {
   clinics,
@@ -39,11 +39,11 @@ async function seed() {
   await db.delete(clinicHours)
   // Delete clinics that match our fixed UUIDs (avoid wiping real data)
   const seedIds = clinicsData.map((c) => c.id)
-  await db.delete(clinics).where(sql`id = ANY(${seedIds})`)
+  await db.delete(clinics).where(inArray(clinics.id, seedIds))
 
   // Clear admin users by fixed UUIDs
   const adminIds = adminUsersData.map((u) => u.id)
-  await db.delete(adminUsers).where(sql`id = ANY(${adminIds})`)
+  await db.delete(adminUsers).where(inArray(adminUsers.id, adminIds))
 
   // Insert in FK order
   console.info('  Inserting clinics...')

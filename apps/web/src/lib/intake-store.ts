@@ -33,6 +33,7 @@ export interface IntakeState {
 
 const STORAGE_KEY = 'dysa-intake-draft'
 
+const SERVER_SNAPSHOT: IntakeState = { step: 0 }
 let state: IntakeState = { step: 0 }
 const listeners = new Set<() => void>()
 
@@ -100,6 +101,6 @@ export function useIntakeStore(): IntakeState {
       return () => listeners.delete(cb)
     }, []),
     () => state,
-    () => ({ step: 0 }),
+    () => SERVER_SNAPSHOT,
   )
 }
