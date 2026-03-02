@@ -10,6 +10,11 @@ import requestContext from './plugins/request-context.js'
 import adminAuth from './plugins/admin-auth.js'
 import { adminAuthRoute } from './routes/admin/auth.js'
 import { adminClinicsRoute } from './routes/admin/clinics.js'
+import { adminClinicHoursRoute } from './routes/admin/clinic-hours.js'
+import { adminClinicServicesRoute } from './routes/admin/clinic-services.js'
+import { adminAccessRulesRoute } from './routes/admin/access-rules.js'
+import { adminPricingRoute } from './routes/admin/pricing.js'
+import { adminIntakeChannelsRoute } from './routes/admin/intake-channels.js'
 import { LOG_FIELDS_BLOCKLIST } from '@dysa/shared'
 
 export function buildApp() {
@@ -41,6 +46,11 @@ export function buildApp() {
   // Admin routes
   app.register(adminAuthRoute)
   app.register(adminClinicsRoute)
+  app.register(adminClinicHoursRoute)
+  app.register(adminClinicServicesRoute)
+  app.register(adminAccessRulesRoute)
+  app.register(adminPricingRoute)
+  app.register(adminIntakeChannelsRoute)
 
   return app
 }
