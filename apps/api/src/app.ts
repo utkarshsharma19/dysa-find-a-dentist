@@ -9,6 +9,7 @@ import { recommendationsRoute } from './routes/recommendations.js'
 import requestContext from './plugins/request-context.js'
 import adminAuth from './plugins/admin-auth.js'
 import { adminAuthRoute } from './routes/admin/auth.js'
+import { adminClinicsRoute } from './routes/admin/clinics.js'
 import { LOG_FIELDS_BLOCKLIST } from '@dysa/shared'
 
 export function buildApp() {
@@ -39,6 +40,7 @@ export function buildApp() {
 
   // Admin routes
   app.register(adminAuthRoute)
+  app.register(adminClinicsRoute)
 
   return app
 }
