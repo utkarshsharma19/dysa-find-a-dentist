@@ -15,6 +15,7 @@ import { adminClinicServicesRoute } from './routes/admin/clinic-services.js'
 import { adminAccessRulesRoute } from './routes/admin/access-rules.js'
 import { adminPricingRoute } from './routes/admin/pricing.js'
 import { adminIntakeChannelsRoute } from './routes/admin/intake-channels.js'
+import { adminClinicServiceRulesRoute } from './routes/admin/clinic-service-rules.js'
 import { LOG_FIELDS_BLOCKLIST } from '@dysa/shared'
 
 export function buildApp() {
@@ -51,6 +52,7 @@ export function buildApp() {
   app.register(adminAccessRulesRoute)
   app.register(adminPricingRoute)
   app.register(adminIntakeChannelsRoute)
+  app.register(adminClinicServiceRulesRoute)
 
   return app
 }
