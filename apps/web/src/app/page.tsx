@@ -1,48 +1,51 @@
 'use client'
 
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Paper from '@mui/material/Paper'
+import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
-import SearchIcon from '@mui/icons-material/Search'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import BiotechIcon from '@mui/icons-material/Biotech'
 import CalculateIcon from '@mui/icons-material/Calculate'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
+import SearchIcon from '@mui/icons-material/Search'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import Link from 'next/link'
+import { DentalOrbitScene } from '@/components/DentalOrbitScene'
 import { Disclaimer } from '@/components/Disclaimer'
 
-const FEATURES: Array<{
-  icon: React.ReactElement
-  title: string
-  body: string
-  href: string
-  cta: string
-}> = [
+const ROUTES = [
   {
-    icon: <SearchIcon fontSize="large" />,
-    title: 'Find a clinic',
-    body: 'Answer a few questions and we match you with Maryland clinics that accept your insurance and can see you soon.',
+    icon: <SearchIcon />,
+    label: 'Find care',
     href: '/intake',
-    cta: 'Start intake',
+    title: 'Match with clinics that can actually see you.',
+    detail: 'Insurance, distance, urgency, language, and access rules in one intake.',
   },
   {
-    icon: <CalculateIcon fontSize="large" />,
-    title: 'Estimate cost',
-    body: 'Pick your state, insurance, and procedures. Get a realistic out-of-pocket range before you call.',
+    icon: <CalculateIcon />,
+    label: 'Know the range',
     href: '/cost-estimator',
-    cta: 'Open estimator',
+    title: 'Estimate your out-of-pocket before the call.',
+    detail: 'Procedure ranges, insurance context, and budget expectations before booking.',
   },
   {
-    icon: <SmartToyIcon fontSize="large" />,
-    title: 'Book with AI',
-    body: 'Free unlimited chat with an AI assistant powered by DSPy + Gemini. Books and reschedules for you.',
-    href: '/cost-estimator',
-    cta: 'Meet the assistant',
+    icon: <BiotechIcon />,
+    label: 'Screen a photo',
+    href: '/diagnose',
+    title: 'Check a close-up image for visible caries signals.',
+    detail: 'Fast model feedback with safety copy that does not replace a dental exam.',
   },
+]
+
+const SIGNALS = ['Medicaid-aware', 'WhatsApp-ready', 'Urgency routing', 'Cost clarity']
+
+const STEPS = [
+  'Tell us what hurts, what coverage you have, and how far you can travel.',
+  'See practical care paths, not a directory full of dead ends.',
+  'Move from estimate to booking with a chat assistant that keeps the next step clear.',
 ]
 
 export default function HomePage() {
@@ -50,125 +53,349 @@ export default function HomePage() {
     <>
       <Box
         sx={{
-          background: (t) =>
-            `linear-gradient(140deg, ${t.palette.primary.dark}, ${t.palette.primary.main})`,
-          color: 'primary.contrastText',
-          py: { xs: 6, md: 10 },
+          position: 'relative',
+          minHeight: { xs: '76svh', md: '84svh' },
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+          bgcolor: '#f7fffb',
+          color: '#111816',
+          borderBottom: '1px solid rgba(11, 71, 62, 0.16)',
         }}
       >
-        <Container maxWidth="md">
-          <Stack spacing={3} alignItems="flex-start">
-            <Stack direction="row" alignItems="center" spacing={1} sx={{ opacity: 0.85 }}>
-              <LocalHospitalIcon fontSize="small" />
-              <Typography variant="overline">Dental access, simplified</Typography>
-            </Stack>
-            <Typography variant="h1" sx={{ fontSize: { xs: '2rem', md: '3rem' }, lineHeight: 1.1 }}>
-              Find dental care. Know the cost.
-              <br />
-              Book in a chat.
-            </Typography>
-            <Typography variant="body1" sx={{ opacity: 0.92, maxWidth: 640 }}>
-              DYSA connects you with vetted clinics, estimates your out-of-pocket cost, and lets an
-              AI assistant book the appointment — on the web or over WhatsApp.
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 1 }}>
-              <Button
-                component={Link}
-                href="/intake"
-                variant="contained"
-                color="secondary"
-                size="large"
-                startIcon={<SearchIcon />}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'linear-gradient(110deg, rgba(247,255,251,0.98) 0%, rgba(247,255,251,0.86) 42%, rgba(247,255,251,0.32) 100%)',
+            zIndex: 1,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            opacity: { xs: 0.36, md: 0.9 },
+            transform: {
+              xs: 'translate(18%, -10%) scale(1.08)',
+              md: 'translate(18%, -4%) scale(1.04)',
+            },
+          }}
+        >
+          <DentalOrbitScene />
+        </Box>
+
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, py: { xs: 7, md: 8 } }}>
+          <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
+            <Grid size={{ xs: 12, md: 7 }}>
+              <Stack spacing={3} alignItems="flex-start">
+                <Stack direction="row" flexWrap="wrap" gap={1}>
+                  {SIGNALS.map((signal) => (
+                    <Chip
+                      key={signal}
+                      label={signal}
+                      size="small"
+                      sx={{
+                        bgcolor: 'rgba(8, 151, 135, 0.1)',
+                        color: '#064c43',
+                        border: '1px solid rgba(8, 151, 135, 0.22)',
+                        borderRadius: 1,
+                        fontWeight: 700,
+                      }}
+                    />
+                  ))}
+                </Stack>
+
+                <Typography
+                  variant="h1"
+                  sx={{
+                    maxWidth: 760,
+                    fontSize: { xs: '2.45rem', sm: '3.5rem', md: '4.8rem' },
+                    lineHeight: 0.95,
+                    letterSpacing: 0,
+                    color: '#0d1714',
+                  }}
+                >
+                  Dental care without phone tag.
+                </Typography>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    maxWidth: 640,
+                    color: '#314b45',
+                    fontSize: { xs: '1rem', md: '1.12rem' },
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Find clinics, estimate cost, screen a close-up photo, and move toward a booking
+                  with fewer dead ends.
+                </Typography>
+
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: '100%' }}>
+                  <Button
+                    component={Link}
+                    href="/intake"
+                    variant="contained"
+                    size="large"
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{
+                      bgcolor: '#0b8f7c',
+                      color: '#ffffff',
+                      px: 3,
+                      py: 1.35,
+                      borderRadius: 1,
+                      boxShadow: '0 18px 40px rgba(8, 143, 124, 0.28)',
+                      '&:hover': { bgcolor: '#087868' },
+                    }}
+                  >
+                    Find a clinic
+                  </Button>
+                  <Button
+                    component={Link}
+                    href="/diagnose"
+                    variant="outlined"
+                    size="large"
+                    startIcon={<BiotechIcon />}
+                    sx={{
+                      color: '#113f39',
+                      borderColor: 'rgba(17, 63, 57, 0.34)',
+                      px: 3,
+                      py: 1.35,
+                      borderRadius: 1,
+                      bgcolor: 'rgba(255,255,255,0.42)',
+                      '&:hover': {
+                        borderColor: '#0b8f7c',
+                        bgcolor: 'rgba(255,255,255,0.68)',
+                      },
+                    }}
+                  >
+                    Try AI screening
+                  </Button>
+                </Stack>
+              </Stack>
+            </Grid>
+
+            <Grid size={{ xs: 12, md: 5 }} sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Stack
+                spacing={1.5}
                 sx={{
-                  bgcolor: 'background.paper',
-                  color: 'primary.main',
-                  '&:hover': { bgcolor: 'grey.100' },
+                  maxWidth: 420,
+                  ml: { md: 'auto' },
+                  color: '#0e211d',
                 }}
               >
-                Find a clinic
-              </Button>
-              <Button
-                component={Link}
-                href="/cost-estimator"
-                variant="outlined"
-                color="inherit"
-                size="large"
-                startIcon={<CalculateIcon />}
-                sx={{ borderColor: 'rgba(255,255,255,0.6)' }}
-              >
-                Estimate cost
-              </Button>
-            </Stack>
-          </Stack>
+                {ROUTES.map((route, index) => (
+                  <Box
+                    key={route.label}
+                    component={Link}
+                    href={route.href}
+                    sx={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      display: 'grid',
+                      gridTemplateColumns: '42px 1fr',
+                      gap: 1.5,
+                      alignItems: 'start',
+                      p: 2,
+                      borderRadius: 1,
+                      bgcolor: 'rgba(255,255,255,0.72)',
+                      border: '1px solid rgba(14, 75, 66, 0.16)',
+                      boxShadow: index === 0 ? '0 22px 60px rgba(18, 74, 66, 0.12)' : 'none',
+                      backdropFilter: 'blur(16px)',
+                      transition:
+                        'transform .18s ease, border-color .18s ease, background .18s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        bgcolor: 'rgba(255,255,255,0.9)',
+                        borderColor: 'rgba(11, 143, 124, 0.42)',
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 1,
+                        display: 'grid',
+                        placeItems: 'center',
+                        bgcolor: index === 2 ? '#ffebee' : '#e4fbf5',
+                        color: index === 2 ? '#d63d55' : '#087868',
+                      }}
+                    >
+                      {route.icon}
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="overline"
+                        sx={{ color: '#0b8f7c', fontWeight: 800, letterSpacing: 0 }}
+                      >
+                        {route.label}
+                      </Typography>
+                      <Typography variant="h3" sx={{ fontSize: '1.05rem', mb: 0.6 }}>
+                        {route.title}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: '#55706a', lineHeight: 1.55 }}>
+                        {route.detail}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
-        <Disclaimer />
-        <Grid container spacing={3} sx={{ mt: 1 }}>
-          {FEATURES.map((f) => (
-            <Grid key={f.title} size={{ xs: 12, md: 4 }}>
-              <Paper
-                variant="outlined"
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'transform .18s, box-shadow .18s',
-                  '&:hover': { transform: 'translateY(-2px)', boxShadow: 2 },
-                }}
-              >
-                <Box sx={{ color: 'primary.main', mb: 1.5 }}>{f.icon}</Box>
-                <Typography variant="h3" sx={{ mb: 1 }}>
-                  {f.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ flex: 1 }}>
-                  {f.body}
-                </Typography>
-                <Button component={Link} href={f.href} sx={{ mt: 2, alignSelf: 'flex-start' }}>
-                  {f.cta} →
-                </Button>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-
-        <Paper
-          elevation={0}
-          sx={{
-            mt: 6,
-            p: { xs: 3, md: 5 },
-            borderRadius: 3,
-            bgcolor: 'secondary.dark',
-            color: 'primary.contrastText',
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { md: 'center' },
-            gap: 3,
-          }}
-        >
-          <WhatsAppIcon sx={{ fontSize: 48, color: '#25D366' }} />
-          <Box sx={{ flex: 1 }}>
-            <Typography variant="h2" sx={{ mb: 1 }}>
-              Prefer WhatsApp? We meet you there.
-            </Typography>
-            <Typography variant="body1" sx={{ opacity: 0.9 }}>
-              Our bot handles booking, reschedules, and reminders in English, Hindi, and Hinglish —
-              with clinical-escalation safety built in.
-            </Typography>
+      <Box sx={{ bgcolor: '#ffffff', py: { xs: 5, md: 8 } }}>
+        <Container maxWidth="lg">
+          <Box sx={{ display: { xs: 'block', md: 'none' }, mb: 3 }}>
+            <Stack spacing={1.5}>
+              {ROUTES.map((route, index) => (
+                <Box
+                  key={route.label}
+                  component={Link}
+                  href={route.href}
+                  sx={{
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    display: 'grid',
+                    gridTemplateColumns: '42px 1fr',
+                    gap: 1.5,
+                    alignItems: 'start',
+                    p: 2,
+                    borderRadius: 1,
+                    bgcolor: index === 1 ? '#f2fff9' : '#ffffff',
+                    border: '1px solid rgba(14, 75, 66, 0.16)',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 1,
+                      display: 'grid',
+                      placeItems: 'center',
+                      bgcolor: index === 2 ? '#ffebee' : '#e4fbf5',
+                      color: index === 2 ? '#d63d55' : '#087868',
+                    }}
+                  >
+                    {route.icon}
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="overline"
+                      sx={{ color: '#0b8f7c', fontWeight: 800, letterSpacing: 0 }}
+                    >
+                      {route.label}
+                    </Typography>
+                    <Typography variant="h3" sx={{ fontSize: '1.05rem', mb: 0.6 }}>
+                      {route.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#55706a', lineHeight: 1.55 }}>
+                      {route.detail}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Stack>
           </Box>
-          <Button
-            component={Link}
-            href="/cost-estimator"
-            variant="contained"
-            sx={{ bgcolor: '#25D366', color: '#0b2b14', '&:hover': { bgcolor: '#1fc15d' } }}
-            size="large"
-          >
-            Try it
-          </Button>
-        </Paper>
-      </Container>
+          <Disclaimer />
+          <Grid container spacing={3} sx={{ mt: 3 }}>
+            {STEPS.map((step, index) => (
+              <Grid key={step} size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    minHeight: 190,
+                    height: '100%',
+                    p: 3,
+                    borderRadius: 1,
+                    border: '1px solid rgba(17, 24, 22, 0.1)',
+                    bgcolor: index === 1 ? '#f2fff9' : '#ffffff',
+                  }}
+                >
+                  <Typography
+                    variant="overline"
+                    sx={{ color: '#e2475b', fontWeight: 800, letterSpacing: 0 }}
+                  >
+                    0{index + 1}
+                  </Typography>
+                  <Typography variant="h2" sx={{ fontSize: '1.28rem', mt: 1, lineHeight: 1.25 }}>
+                    {step}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      <Box sx={{ bgcolor: '#f5faf8', py: { xs: 5, md: 8 } }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={{ xs: 4, md: 7 }} alignItems="center">
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Box
+                component="img"
+                src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=1400&q=80"
+                alt="Dentist reviewing care with a patient"
+                sx={{
+                  display: 'block',
+                  width: '100%',
+                  aspectRatio: '4 / 3',
+                  objectFit: 'cover',
+                  borderRadius: 1,
+                  boxShadow: '0 28px 80px rgba(15, 47, 40, 0.18)',
+                }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Stack spacing={2.5}>
+                <Typography
+                  variant="overline"
+                  sx={{ color: '#0b8f7c', fontWeight: 800, letterSpacing: 0 }}
+                >
+                  from search to scheduled
+                </Typography>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontSize: { xs: '2rem', md: '3rem' },
+                    lineHeight: 1,
+                    color: '#101816',
+                  }}
+                >
+                  The next step should be obvious.
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#4d625d', lineHeight: 1.75 }}>
+                  DYSA keeps the stressful parts together: triage, clinic access, cost ranges,
+                  language needs, and appointment handoff.
+                </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                  <Button
+                    component={Link}
+                    href="/cost-estimator"
+                    variant="contained"
+                    startIcon={<CalculateIcon />}
+                    sx={{ bgcolor: '#111816', borderRadius: 1, '&:hover': { bgcolor: '#26312e' } }}
+                  >
+                    Estimate cost
+                  </Button>
+                  <Button
+                    component={Link}
+                    href="/cost-estimator"
+                    variant="outlined"
+                    startIcon={<WhatsAppIcon />}
+                    sx={{ borderRadius: 1, color: '#0b8f7c', borderColor: '#0b8f7c' }}
+                  >
+                    Open chat
+                  </Button>
+                </Stack>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
     </>
   )
 }

@@ -5,14 +5,14 @@ import { createTheme } from '@mui/material/styles'
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#1565C0',
-      light: '#42A5F5',
-      dark: '#0D47A1',
+      main: '#0B8F7C',
+      light: '#40C7B0',
+      dark: '#075F54',
     },
     secondary: {
-      main: '#00897B',
-      light: '#4DB6AC',
-      dark: '#00695C',
+      main: '#E2475B',
+      light: '#FF7B8A',
+      dark: '#A92F43',
     },
     error: {
       main: '#D32F2F',
@@ -21,7 +21,7 @@ export const theme = createTheme({
       main: '#F57C00',
     },
     background: {
-      default: '#FAFAFA',
+      default: '#F7FFFB',
     },
   },
   typography: {
@@ -40,7 +40,7 @@ export const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 8,
   },
   components: {
     MuiButton: {
@@ -48,6 +48,14 @@ export const theme = createTheme({
         root: {
           textTransform: 'none',
           fontWeight: 600,
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        rounded: {
+          borderRadius: 8,
         },
       },
     },
