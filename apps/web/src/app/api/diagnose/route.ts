@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? 'http://localhost:8000'
+const DEFAULT_ML_SERVICE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://utkarshsharma19-dysa-dental-screening.hf.space'
+    : 'http://localhost:8000'
+
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? DEFAULT_ML_SERVICE_URL
 
 export const runtime = 'nodejs'
 
