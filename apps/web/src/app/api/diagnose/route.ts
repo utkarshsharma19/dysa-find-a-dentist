@@ -8,12 +8,12 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData()
   const file = formData.get('file')
 
-  if (!(file instanceof File)) {
+  if (!file || typeof file === 'string' || typeof file.arrayBuffer !== 'function') {
     return NextResponse.json({ error: 'file is required' }, { status: 400 })
   }
 
   const upstream = new FormData()
-  upstream.append('file', file, file.name)
+  upstream.append('file', file, file.name || 'upload')
 
   const res = await fetch(`${ML_SERVICE_URL}/predict`, {
     method: 'POST',
