@@ -30,6 +30,69 @@ interface PredictResponse {
 const ML_REPO_URL =
   process.env.NEXT_PUBLIC_ML_REPO_URL ?? 'https://github.com/utkarshsharma19/-dysa-ml'
 
+const MAX_UPLOAD_IMAGE_SIDE = 1280
+const MAX_DIRECT_UPLOAD_BYTES = 2 * 1024 * 1024
+const ANALYZE_TIMEOUT_MS = 70_000
+
+const loadImageFromFile = (file: File) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Use a JPEG, PNG, or WebP image.'))
+    }
+    img.src = url
+  })
+
+const prepareImageForUpload = async (source: File) => {
+  if (!source.type.startsWith('image/')) {
+    throw new Error('Choose an image file.')
+  }
+
+  const img = await loadImageFromFile(source)
+  const maxSide = Math.max(img.naturalWidth, img.naturalHeight)
+
+  if (!maxSide) {
+    throw new Error('Could not read that image.')
+  }
+
+  const scale = Math.min(1, MAX_UPLOAD_IMAGE_SIDE / maxSide)
+  if (scale === 1 && source.size <= MAX_DIRECT_UPLOAD_BYTES) {
+    return source
+  }
+
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.max(1, Math.round(img.naturalWidth * scale))
+  canvas.height = Math.max(1, Math.round(img.naturalHeight * scale))
+
+  const ctx = canvas.getContext('2d')
+  if (!ctx) {
+    throw new Error('Could not prepare that image.')
+  }
+
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (value) => {
+        if (value) resolve(value)
+        else reject(new Error('Could not prepare that image.'))
+      },
+      'image/jpeg',
+      0.85,
+    )
+  })
+
+  const name = source.name.replace(/\.[^.]+$/, '') || 'upload'
+  return new File([blob], `${name}.jpg`, { type: 'image/jpeg' })
+}
+
 export default function DiagnosePage() {
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
@@ -57,18 +120,32 @@ export default function DiagnosePage() {
     if (!file) return
     setLoading(true)
     setError(null)
+
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), ANALYZE_TIMEOUT_MS)
+
     try {
+      const uploadFile = await prepareImageForUpload(file)
       const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/api/diagnose', { method: 'POST', body: fd })
+      fd.append('file', uploadFile)
+      const res = await fetch('/api/diagnose', {
+        method: 'POST',
+        body: fd,
+        signal: controller.signal,
+      })
       if (!res.ok) {
         const j = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
         throw new Error(j.error ?? 'Request failed')
       }
       setResult((await res.json()) as PredictResponse)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Unknown error')
+      if (e instanceof Error && e.name === 'AbortError') {
+        setError('Analysis is taking too long. Try again in a minute or upload a smaller JPEG.')
+      } else {
+        setError(e instanceof Error ? e.message : 'Unknown error')
+      }
     } finally {
+      window.clearTimeout(timeoutId)
       setLoading(false)
     }
   }
@@ -172,17 +249,31 @@ export default function DiagnosePage() {
             {loading ? 'Analyzing…' : 'Analyze'}
           </Button>
 
-          {loading && <LinearProgress />}
+          {loading && (
+            <Box>
+              <LinearProgress />
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+                Preparing the photo and checking it with the model. First runs can take up to a
+                minute.
+              </Typography>
+            </Box>
+          )}
           {error && <Alert severity="error">{error}</Alert>}
 
           {result && (
             <Box>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 {result.detections.length === 0
-                  ? 'No regions of concern detected.'
+                  ? 'No model finding above the confidence threshold.'
                   : `${result.detections.length} region${result.detections.length > 1 ? 's' : ''} detected`}
                 {result.predicted_condition && ` — top: ${result.predicted_condition}`}
               </Typography>
+              {result.detections.length === 0 && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  This does not rule out a dental problem. The model only screens for visible caries
+                  in clear close-up photos and can miss real issues.
+                </Alert>
+              )}
               <Stack direction="row" flexWrap="wrap" gap={1}>
                 {result.detections.map((d, i) => (
                   <Chip
