@@ -27,9 +27,6 @@ interface PredictResponse {
   detections: Detection[]
 }
 
-const ML_REPO_URL =
-  process.env.NEXT_PUBLIC_ML_REPO_URL ?? 'https://github.com/utkarshsharma19/-dysa-ml'
-
 const MAX_UPLOAD_IMAGE_SIDE = 1280
 const MAX_DIRECT_UPLOAD_BYTES = 2 * 1024 * 1024
 const ANALYZE_TIMEOUT_MS = 70_000
@@ -293,13 +290,6 @@ export default function DiagnosePage() {
         This tool does not replace a dental exam. If you have pain, bleeding, swelling, or trauma,
         see a dentist — use our <Link href="/emergency">emergency guide</Link> if urgent.
       </Alert>
-
-      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 3 }}>
-        Model: Ultralytics YOLO (AGPL-3.0). Source code for this inference service:{' '}
-        <Link href={ML_REPO_URL} target="_blank" rel="noopener noreferrer">
-          {ML_REPO_URL}
-        </Link>
-      </Typography>
     </Container>
   )
 }

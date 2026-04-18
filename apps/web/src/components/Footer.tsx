@@ -13,7 +13,7 @@ export function Footer() {
           call 911 or visit your nearest emergency room.
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
-          Maryland Dental Access Navigator &copy; {new Date().getFullYear()}
+          DYSA Dental &copy; {new Date().getFullYear()}
         </Typography>
       </Container>
     </Box>

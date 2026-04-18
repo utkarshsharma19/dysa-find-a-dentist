@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
             Admin Login
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center" sx={{ mb: 3 }}>
-            Maryland Dental Access Navigator
+            DYSA Dental
           </Typography>
 
           {error && (
