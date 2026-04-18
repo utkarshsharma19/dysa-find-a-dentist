@@ -150,7 +150,6 @@ export default function DiagnosePage() {
 
           {previewUrl && (
             <Box sx={{ position: 'relative', display: 'inline-block', maxWidth: '100%' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 ref={imgRef}
                 src={previewUrl}
