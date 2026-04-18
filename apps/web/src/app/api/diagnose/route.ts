@@ -5,7 +5,13 @@ const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? 'http://localhost:8000'
 export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData()
+  let formData: FormData
+  try {
+    formData = await req.formData()
+  } catch {
+    return NextResponse.json({ error: 'multipart form data is required' }, { status: 400 })
+  }
+
   const file = formData.get('file')
 
   if (!file || typeof file === 'string' || typeof file.arrayBuffer !== 'function') {
@@ -15,10 +21,15 @@ export async function POST(req: NextRequest) {
   const upstream = new FormData()
   upstream.append('file', file, file.name || 'upload')
 
-  const res = await fetch(`${ML_SERVICE_URL}/predict`, {
-    method: 'POST',
-    body: upstream,
-  })
+  let res: Response
+  try {
+    res = await fetch(`${ML_SERVICE_URL}/predict`, {
+      method: 'POST',
+      body: upstream,
+    })
+  } catch {
+    return NextResponse.json({ error: 'inference service unavailable' }, { status: 502 })
+  }
 
   if (!res.ok) {
     const msg = await res.text().catch(() => 'inference failed')
