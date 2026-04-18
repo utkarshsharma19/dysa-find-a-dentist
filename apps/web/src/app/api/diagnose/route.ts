@@ -1,11 +1,18 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-const DEFAULT_ML_SERVICE_URL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://utkarshsharma19-dysa-dental-screening.hf.space'
-    : 'http://localhost:8000'
+const PRODUCTION_ML_SERVICE_URL = 'https://utkarshsharma19-dysa-dental-screening.hf.space'
+const LOCAL_ML_SERVICE_URL = 'http://localhost:8000'
+const configuredMlServiceUrl = process.env.ML_SERVICE_URL?.trim()
+const configuredMlServiceIsLocal =
+  !configuredMlServiceUrl ||
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/)?$/i.test(configuredMlServiceUrl)
 
-const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? DEFAULT_ML_SERVICE_URL
+const ML_SERVICE_URL =
+  process.env.NODE_ENV === 'production'
+    ? configuredMlServiceIsLocal
+      ? PRODUCTION_ML_SERVICE_URL
+      : configuredMlServiceUrl
+    : (configuredMlServiceUrl ?? LOCAL_ML_SERVICE_URL)
 
 export const runtime = 'nodejs'
 
