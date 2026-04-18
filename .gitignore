@@ -37,3 +37,6 @@ pnpm-debug.log*
 
 # Misc
 *.tsbuildinfo
+
+# ML inference service — tracked as its own repo (AGPL-3.0)
+apps/ml/

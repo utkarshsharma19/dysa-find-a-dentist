@@ -27,6 +27,7 @@ import { AuthDialog } from './AuthDialog'
 const NAV = [
   { href: '/intake', label: 'Find a clinic' },
   { href: '/cost-estimator', label: 'Cost estimator' },
+  { href: '/diagnose', label: 'AI screening' },
   { href: '/emergency', label: 'Emergency' },
 ]
 
