@@ -1,5 +1,5 @@
 import { pgTable, uuid, text, boolean, timestamp } from 'drizzle-orm/pg-core'
-import { chiefComplaint, triageAction } from './enums'
+import { chiefComplaint, triageAction } from './enums.js'
 
 export const triageRedFlags = pgTable('triage_red_flags', {
   id: uuid('id').primaryKey().defaultRandom(),

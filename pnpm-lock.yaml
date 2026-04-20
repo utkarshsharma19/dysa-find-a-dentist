@@ -35,6 +35,9 @@ importers:
       '@dysa/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@dysa/worker':
+        specifier: workspace:*
+        version: link:../worker
       '@fastify/cors':
         specifier: ^10.0.0
         version: 10.1.0

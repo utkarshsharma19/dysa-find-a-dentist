@@ -21,6 +21,8 @@ services:
         value: 0.0.0.0
       - key: LOG_LEVEL
         value: info
+      - key: RUN_WORKER_INLINE
+        value: "true"
       - key: DATABASE_URL
         sync: false
       - key: REDIS_URL
@@ -31,27 +33,3 @@ services:
         generateValue: true
       - key: ADMIN_JWT_SECRET
         generateValue: true
-
-  - type: worker
-    name: dysa-worker
-    runtime: node
-    region: oregon
-    plan: free
-    rootDir: .
-    buildCommand: |
-      corepack enable
-      corepack prepare pnpm@10.30.1 --activate
-      pnpm install --frozen-lockfile
-      pnpm turbo run build --filter=@dysa/worker
-    startCommand: node apps/worker/dist/main.js
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NODE_VERSION
-        value: "20"
-      - key: LOG_LEVEL
-        value: info
-      - key: DATABASE_URL
-        sync: false
-      - key: REDIS_URL
-        sync: false

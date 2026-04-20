@@ -23,7 +23,7 @@ import {
   pricingModel,
   intakeChannelType,
   sourceType,
-} from './enums'
+} from './enums.js'
 
 // ── clinics ──
 

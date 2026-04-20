@@ -27,8 +27,8 @@ import {
   notificationType,
   notificationChannel,
   deliveryStatus,
-} from './enums'
-import { clinics } from './clinics'
+} from './enums.js'
+import { clinics } from './clinics.js'
 
 // ── sessions ──
 

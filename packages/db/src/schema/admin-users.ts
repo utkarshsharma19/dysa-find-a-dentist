@@ -1,5 +1,5 @@
 import { pgTable, uuid, text, boolean, timestamp } from 'drizzle-orm/pg-core'
-import { adminRole } from './enums'
+import { adminRole } from './enums.js'
 
 export const adminUsers = pgTable('admin_users', {
   id: uuid('id').primaryKey().defaultRandom(),
