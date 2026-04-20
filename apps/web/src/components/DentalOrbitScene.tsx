@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import type * as ThreeNS from 'three'
 
 export function DentalOrbitScene() {
   const hostRef = useRef<HTMLDivElement | null>(null)
@@ -13,7 +14,7 @@ export function DentalOrbitScene() {
     let cleanup: (() => void) | undefined
 
     void (async () => {
-      let THREE: typeof import('three')
+      let THREE: typeof ThreeNS
       try {
         THREE = await import('three')
       } catch (err) {
@@ -34,7 +35,7 @@ export function DentalOrbitScene() {
         return
       }
 
-      let renderer: import('three').WebGLRenderer
+      let renderer: ThreeNS.WebGLRenderer
       try {
         renderer = new THREE.WebGLRenderer({
           antialias: true,
@@ -133,7 +134,7 @@ export function DentalOrbitScene() {
       scanPlane.rotation.x = -0.36
       stage.add(scanPlane)
 
-      const linePoints: import('three').Vector3[] = []
+      const linePoints: ThreeNS.Vector3[] = []
       for (let i = 0; i <= 80; i += 1) {
         const t = i / 80
         const angle = Math.PI * (0.13 + 0.74 * t)
