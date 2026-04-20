@@ -1,5 +1,5 @@
 import Fastify from 'fastify'
-import cors from '@fastify/cors'
+import cors, { type FastifyCorsOptions } from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import sensible from '@fastify/sensible'
 import { healthRoute } from './routes/health.js'
@@ -33,8 +33,21 @@ export function buildApp() {
     genReqId: () => crypto.randomUUID(),
   })
 
+  const allowedOrigins = (process.env.CORS_ORIGIN ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+  const corsOrigin: FastifyCorsOptions['origin'] = allowedOrigins.length
+    ? (origin, cb) => {
+        if (!origin) return cb(null, true)
+        if (allowedOrigins.includes(origin)) return cb(null, true)
+        if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)) return cb(null, true)
+        cb(new Error('Not allowed by CORS'), false)
+      }
+    : true
+
   // Plugins
-  app.register(cors, { origin: process.env.CORS_ORIGIN ?? true })
+  app.register(cors, { origin: corsOrigin })
   app.register(helmet)
   app.register(sensible)
   app.register(requestContext)
